@@ -6,6 +6,8 @@ type
   TokenKind = enum
     tkIndent,
     tkLet,
+    tkIf,
+    tkElse,
     tkLitTrue,
     tkLitFalse,
     tkLitInt,
@@ -52,8 +54,10 @@ let p = peg("things", ts: TokenList):
 
     colon <- ":": ts.add Token(kind: tkColon)
 
-    keyword <- keyword_let
-    keyword_let <- "let" * S: ts.add Token(kind: tkLet)
+    keyword <- kw_let | kw_if | kw_else
+    kw_let <- "let" * S: ts.add Token(kind: tkLet)
+    kw_if <- "if" * S: ts.add Token(kind: tkIf)
+    kw_else <- "else" * S: ts.add Token(kind: tkElse)
 
     binop <- binop_equals | binop_assign
     binop_equals <- "==": ts.add Token(kind: tkEquals)
